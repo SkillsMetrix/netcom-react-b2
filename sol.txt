@@ -19,10 +19,19 @@ export default class MainApp extends Component {
     });
   };
 
+  deleteAll=()=>{
+    this.setState((prevState)=>{
+      return{
+        userData:[]
+      }
+    })
+  }
   render() {
     return (
       <View>
-        <Header hdata={this.state.headerData} />
+        <Header da={this.deleteAll} hdata={this.state.headerData} 
+        hasData={!this.state.userData.length>0}
+        />
         <AddUser  au={this.addUser}/>
         <Users userdata={this.state.userData} />
         <Footer />
@@ -30,30 +39,16 @@ export default class MainApp extends Component {
     );
   }
 }
+---
 
-----------------
-
-import { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
-
-export default function AddUser(props) {
-  // initilalize the sate of the component
-  const [uname, setUname] = useState("");
- 
-  const addUser = () => {
-    console.log(uname);
-    props.au(uname)
-  };
-
-  return (
-    <View>
-      <TextInput
-        placeholder="Enter UserName"
-        value={uname}
-        onChangeText={(newuser) => setUname(newuser)}
-      ></TextInput>
-     
-      <Button title="Add User" onPress={addUser}></Button>
-    </View>
-  );
+import React, { Component } from "react";
+import { Button, Text, View } from "react-native";
+export default class Header extends Component {
+  render() {
+    return (
+      <View>
+        <Button disabled={this.props.hasData} onPress={this.props.da} title="Delete All"></Button>
+      </View>
+    );
+  }
 }
