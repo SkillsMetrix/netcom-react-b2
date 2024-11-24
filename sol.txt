@@ -1,92 +1,48 @@
-import React, { Component } from "react";
-import { Text, View } from "react-native";
-import Header from "./Header";
-import Footer from "./Footer";
-import AddUser from "./AddUser";
-import Users from "./Users";
-export default class MainApp extends Component {
-  // initilalize the sate of the component
-  state = {
-    headerData: "Welcome to Header Component",
-    userData: [''],
-  };
+ReactJS-- > SPA  (MPA)
 
-  addUser = (user) => {
-    this.setState((prevState) => {
-      return {
-        userData: prevState.userData.concat(user),
-      };
-    });
-  };
+ReactJS,Angular,Vue
 
-  deleteAll=()=>{
-    this.setState((prevState)=>{
-      return{
-        userData:[]
-      }
-    })
-  }
-  deleteUser=(data)=>{
-    this.setState((prevState)=>{
-      return{
-        userData:prevState.userData.filter((option)=> data !== option)
-      }
-    })
-  }
-  render() {
-    return (
-      <View>
-        <Header da={this.deleteAll} hdata={this.state.headerData} 
-        hasData={!this.state.userData.length>0}
-        />
-        <AddUser  au={this.addUser}/>
-        <Users userdata={this.state.userData}
-        du={this.deleteUser}
-        />
-        <Footer />
-      </View>
-    );
-  }
-}
---------
+Component (View) centric application
+
+JSX -> javascript syntax ext (HTML)
+-----
+JavaScript -> object based (not OOL)
+  2-> Dynamic Typed
+  3) Browser Incompatip
+
+-----------> Es6.0  (OOJS) ,Static Typed---------->
+
+Transpiler ---> BabelJS----> JS
+
+Images, CSS, HTML ,JS  --> Webpack---
+
+React Native , IOnic , Flutter  (HYBRID)
+
+Android or IOS   ( Native)
 
 
-import { Text, StyleSheet, View } from 'react-native'
-import React, { Component } from 'react'
-import User from './User'
+React----->React Native.
 
-export default class Users extends Component {
-  render() {
-    return (
-      <View>
-        {this.props.userdata.map((data)=> <User key={data} 
-        deleteuser={this.props.du}
-        ud={data}/> )}
-      
-      </View>
-    )
-  }
-}
+Emulator 
 
-const styles = StyleSheet.create({})
+Expo
 
-----------
+npx create-expo-app --template
+cd my-app
+npx expo start --tunnel
+------------
+
+components-> 
+
+1) class based
+2) functional
+
+--------------
+props  ( to receive the data from its parent)
+state  (it sends the updated state back to child)
 
 
-import { Text, StyleSheet, View, Button } from 'react-native'
-import React, { Component } from 'react'
 
-export default class User extends Component {
-  render() {
-    return (
-      <View >
-        <Text>{this.props.ud}</Text>
-        <View>
-          <Button onPress={()=> this.props.deleteuser(this.props.ud)} title='delete'></Button>
-        </View>
-      </View>
-    )
-  }
-}
 
-const styles = StyleSheet.create({})
+
+
