@@ -26,6 +26,13 @@ export default class MainApp extends Component {
       }
     })
   }
+  deleteUser=(data)=>{
+    this.setState((prevState)=>{
+      return{
+        userData:prevState.userData.filter((option)=> data !== option)
+      }
+    })
+  }
   render() {
     return (
       <View>
@@ -33,22 +40,53 @@ export default class MainApp extends Component {
         hasData={!this.state.userData.length>0}
         />
         <AddUser  au={this.addUser}/>
-        <Users userdata={this.state.userData} />
+        <Users userdata={this.state.userData}
+        du={this.deleteUser}
+        />
         <Footer />
       </View>
     );
   }
 }
----
+--------
 
-import React, { Component } from "react";
-import { Button, Text, View } from "react-native";
-export default class Header extends Component {
+
+import { Text, StyleSheet, View } from 'react-native'
+import React, { Component } from 'react'
+import User from './User'
+
+export default class Users extends Component {
   render() {
     return (
       <View>
-        <Button disabled={this.props.hasData} onPress={this.props.da} title="Delete All"></Button>
+        {this.props.userdata.map((data)=> <User key={data} 
+        deleteuser={this.props.du}
+        ud={data}/> )}
+      
       </View>
-    );
+    )
   }
 }
+
+const styles = StyleSheet.create({})
+
+----------
+
+
+import { Text, StyleSheet, View, Button } from 'react-native'
+import React, { Component } from 'react'
+
+export default class User extends Component {
+  render() {
+    return (
+      <View >
+        <Text>{this.props.ud}</Text>
+        <View>
+          <Button onPress={()=> this.props.deleteuser(this.props.ud)} title='delete'></Button>
+        </View>
+      </View>
+    )
+  }
+}
+
+const styles = StyleSheet.create({})
