@@ -1,0 +1,59 @@
+import React, { Component } from "react";
+import { Text, View } from "react-native";
+import Header from "./Header";
+import Footer from "./Footer";
+import AddUser from "./AddUser";
+import Users from "./Users";
+export default class MainApp extends Component {
+  // initilalize the sate of the component
+  state = {
+    headerData: "Welcome to Header Component",
+    userData: [''],
+  };
+
+  addUser = (user) => {
+    this.setState((prevState) => {
+      return {
+        userData: prevState.userData.concat(user),
+      };
+    });
+  };
+
+  render() {
+    return (
+      <View>
+        <Header hdata={this.state.headerData} />
+        <AddUser  au={this.addUser}/>
+        <Users userdata={this.state.userData} />
+        <Footer />
+      </View>
+    );
+  }
+}
+
+----------------
+
+import { useState } from "react";
+import { Button, Text, TextInput, View } from "react-native";
+
+export default function AddUser(props) {
+  // initilalize the sate of the component
+  const [uname, setUname] = useState("");
+ 
+  const addUser = () => {
+    console.log(uname);
+    props.au(uname)
+  };
+
+  return (
+    <View>
+      <TextInput
+        placeholder="Enter UserName"
+        value={uname}
+        onChangeText={(newuser) => setUname(newuser)}
+      ></TextInput>
+     
+      <Button title="Add User" onPress={addUser}></Button>
+    </View>
+  );
+}
