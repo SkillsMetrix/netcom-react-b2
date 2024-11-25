@@ -1,88 +1,38 @@
-export const persons = [
-    {
-      id: '1',
-      name: 'Earnest Green',
-    },
-    {
-      id: '2',
-      name: 'Winston Orn',
-    },
-    {
-      id: '3',
-      name: 'Carlton Collins',
-    },
-    {
-      id: '4',
-      name: 'Malcolm Labadie',
-    },
-    {
-      id: '5',
-      name: 'Michelle Dare',
-    },
-    {
-      id: '6',
-      name: 'Carlton Zieme',
-    },
-    {
-      id: '7',
-      name: 'Jessie Dickinson',
-    },
-    {
-      id: '8',
-      name: 'Julian Gulgowski',
-    },
-    {
-      id: '9',
-      name: 'Ellen Veum',
-    },
-    {
-      id: '10',
-      name: 'Lorena Rice',
-    },
-  
-    {
-      id: '11',
-      name: 'Carlton Zieme',
-    },
-    {
-      id: '12',
-      name: 'Jessie Dickinson',
-    },
-    {
-      id: '13',
-      name: 'Julian Gulgowski',
-    },
-    {
-      id: '14',
-      name: 'Ellen Veum',
-    },
-    {
-      id: '15',
-      name: 'Lorena Rice',
-    },
-  ];
-
-
----------
-
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React from "react";
-import { persons } from "../models/persons";
 
-export default function FlatListApp() {
+export default function TouchableApp() {
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View>
-          {persons.map((person) => {
-            return (
-              <View key={person.id}>
-                <Text style={styles.item}>{person.name}</Text>
-              </View>
-            );
-          })}
-        </View>
-      </ScrollView>
+      <Button title="normal button"></Button>
+      <View>
+        <TouchableOpacity style={[styles.button, { backgroundColor: "red" }]}>
+          <Text>First Touch</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "blue" }]}
+          activeOpacity={0.1}
+        >
+          <Text>Second Touch</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#2277ee" }]}
+        >
+          <Image
+            style={styles.logo}
+            source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -90,12 +40,16 @@ export default function FlatListApp() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 50,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  item: {
-    padding: 20,
-    fontSize: 15,
-    marginTop: 5,
+  button: {
+    marginBottom: 12,
+    padding: 12,
+  },
+  logo: {
+    width: 100,
+    height: 100,
   },
 });
-
