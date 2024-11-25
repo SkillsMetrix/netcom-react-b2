@@ -1,72 +1,55 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import RestData from "./RestData";
-import LoadUsers from "./LoadUsers";
-
-const URL = "https://jsonplaceholder.typicode.com/users";
-export default function RestFunctional() {
-  // initialize the state
-  const [users, setUsers] = useState([]);
-  // lifecycle function
-  /* useEffect(() => {
-    axios
-      .get(URL)
-      .then((response) => response.data)
-      .then((data) => {
-        setUsers(data);
-      });
-    
-  }, []); */
-
-  const loadData=()=>{
-    axios
-    .get(URL)
-    .then((response) => response.data)
-    .then((data) => {
-      setUsers(data);
-    });
-  }
-  return (
-    <View>
-      <LoadUsers ld={loadData}/>
-      <RestData userData={users}/>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({});
-----------
-import { Button, StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import React from "react";
 
-export default function LoadUsers(props) {
+export default function TouchableApp() {
   return (
-    <View>
-      <Button title="load users" onPress={props.ld}></Button>
+    <View style={styles.container}>
+      <Button title="normal button"></Button>
+      <View>
+        <TouchableOpacity style={[styles.button, { backgroundColor: "red" }]}>
+          <Text>First Touch</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "blue" }]}
+          activeOpacity={0.1}
+        >
+          <Text>Second Touch</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#2277ee" }]}
+        >
+          <Image
+            style={styles.logo}
+            source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
-------------
-
-
-
-
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-
-export default function RestData(props) {
-  return (
-    <View>
-        {props.userData.map((user) => (
-        <Text key={user.id}>
-          {user.name}---- {user.email}
-        </Text>
-      ))}
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    marginBottom: 12,
+    padding: 12,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+});
