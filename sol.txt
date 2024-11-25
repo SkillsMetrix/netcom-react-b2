@@ -1,48 +1,19 @@
-ReactJS-- > SPA  (MPA)
+import { Text, StyleSheet, View } from "react-native";
+import React, { Component } from "react";
+import axios from "axios";
 
-ReactJS,Angular,Vue
+const URL = "https://jsonplaceholder.typicode.com/users";
+export default class RestClass extends Component {
+  componentDidMount() {
+    console.log("called during load");
+  }
+  render() {
+    return (
+      <View>
+        <Text>RestClass</Text>
+      </View>
+    );
+  }
+}
 
-Component (View) centric application
-
-JSX -> javascript syntax ext (HTML)
------
-JavaScript -> object based (not OOL)
-  2-> Dynamic Typed
-  3) Browser Incompatip
-
------------> Es6.0  (OOJS) ,Static Typed---------->
-
-Transpiler ---> BabelJS----> JS
-
-Images, CSS, HTML ,JS  --> Webpack---
-
-React Native , IOnic , Flutter  (HYBRID)
-
-Android or IOS   ( Native)
-
-
-React----->React Native.
-
-Emulator 
-
-Expo
-
-npx create-expo-app --template
-cd my-app
-npx expo start --tunnel
-------------
-
-components-> 
-
-1) class based
-2) functional
-
---------------
-props  ( to receive the data from its parent)
-state  (it sends the updated state back to child)
-
-
-
-
-
-
+const styles = StyleSheet.create({});
