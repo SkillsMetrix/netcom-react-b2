@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 const URL = "https://randomuser.me/api/?page=3&results=10";
@@ -7,8 +14,6 @@ export default function InfiniteScrollApp() {
 
   const getUsers = () => {
     axios.get(URL).then((res) => {
-      console.log(res.data.results);
-
       setUsers(res.data.results);
     });
   };
@@ -30,6 +35,16 @@ export default function InfiniteScrollApp() {
       </View>
     );
   };
+  const renderLoader = () => {
+    return (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="red" />
+      </View>
+    );
+  };
+  const loadMoreItem = () => {
+    console.log("load more");
+  };
   useEffect(() => {
     getUsers();
   }, []);
@@ -38,6 +53,8 @@ export default function InfiniteScrollApp() {
       data={users}
       renderItem={renderItem}
       keyExtractor={(item) => item.email}
+      ListFooterComponent={renderLoader}
+      onEndReached={loadMoreItem}
     />
   );
 }
@@ -60,5 +77,8 @@ const styles = StyleSheet.create({
   },
   txtName: { fontSize: 16 },
   txtEmail: { color: "blue" },
-  loaderStyle: {},
+  loaderStyle: {
+    marginVertical: 16,
+    alignItems: "center",
+  },
 });
