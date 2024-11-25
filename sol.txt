@@ -1,19 +1,72 @@
-import { Text, StyleSheet, View } from "react-native";
-import React, { Component } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import RestData from "./RestData";
+import LoadUsers from "./LoadUsers";
 
 const URL = "https://jsonplaceholder.typicode.com/users";
-export default class RestClass extends Component {
-  componentDidMount() {
-    console.log("called during load");
+export default function RestFunctional() {
+  // initialize the state
+  const [users, setUsers] = useState([]);
+  // lifecycle function
+  /* useEffect(() => {
+    axios
+      .get(URL)
+      .then((response) => response.data)
+      .then((data) => {
+        setUsers(data);
+      });
+    
+  }, []); */
+
+  const loadData=()=>{
+    axios
+    .get(URL)
+    .then((response) => response.data)
+    .then((data) => {
+      setUsers(data);
+    });
   }
-  render() {
-    return (
-      <View>
-        <Text>RestClass</Text>
-      </View>
-    );
-  }
+  return (
+    <View>
+      <LoadUsers ld={loadData}/>
+      <RestData userData={users}/>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({});
+----------
+import { Button, StyleSheet, Text, View } from "react-native";
+import React from "react";
+
+export default function LoadUsers(props) {
+  return (
+    <View>
+      <Button title="load users" onPress={props.ld}></Button>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({});
+------------
+
+
+
+
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
+export default function RestData(props) {
+  return (
+    <View>
+        {props.userData.map((user) => (
+        <Text key={user.id}>
+          {user.name}---- {user.email}
+        </Text>
+      ))}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({})
