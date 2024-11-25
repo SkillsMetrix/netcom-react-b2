@@ -61,3 +61,41 @@ export const persons = [
       name: 'Lorena Rice',
     },
   ];
+
+
+---------
+
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import React from "react";
+import { persons } from "../models/persons";
+
+export default function FlatListApp() {
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        <View>
+          {persons.map((person) => {
+            return (
+              <View key={person.id}>
+                <Text style={styles.item}>{person.name}</Text>
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 50,
+  },
+  item: {
+    padding: 20,
+    fontSize: 15,
+    marginTop: 5,
+  },
+});
+
