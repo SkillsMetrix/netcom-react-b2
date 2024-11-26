@@ -1,3 +1,48 @@
- 
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-https://github.com/SkillsMetrix/netcom-react/blob/main/img.zip
+const API_KEY = "b3aaa0b3323c0baab93aff38f75b44cb";
+
+export default function App() {
+  //initialize the state
+
+  const [weatherData, setWeatherData] = useState(null);
+  const [loaded, setLoaded] = useState(true);
+
+  async function fetchWeatherData(cityName) {
+    setLoaded(false);
+    const URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`;
+    try {
+      const response = await fetch(URL);
+      if (response.status == 200) {
+        const data = await response.json();
+        console.log(data);
+
+        // setWeatherData(data)
+      } else {
+        //setWeatherData(null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchWeatherData("mumbai");
+  }, []);
+  return (
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
