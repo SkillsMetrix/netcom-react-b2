@@ -16,11 +16,11 @@ export default function Weather({ weatherData }) {
     weather,
     name,
     main: { temp, humidity },
+    wind: { speed },
   } = weatherData;
   const [{ main }] = weather;
 
   useEffect(() => {
-    console.log(main);
     setBackgroundImage(getBackgroundImg(main));
   }, [weatherData]);
 
@@ -32,6 +32,7 @@ export default function Weather({ weatherData }) {
 
     return haze;
   }
+  let textColor = backgroundImage !== sunny ? "white" : "black";
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -40,8 +41,42 @@ export default function Weather({ weatherData }) {
         resizeMode="cover"
       >
         <SearchBar />
+
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.headerText}>{name}</Text>
+          <Text
+            style={{
+              ...styles.headerText,
+              color: textColor,
+              fontWeight: "bold",
+              fontSize: 46,
+            }}
+          >
+            {name}
+          </Text>
+          <Text
+            style={{
+              ...styles.headerText,
+              color: textColor,
+              fontWeight: "bold",
+              fontSize: 46,
+            }}
+          >
+            {main}
+          </Text>
+          <Text style={{ ...styles.headerText, color: textColor }}>
+            {temp} *C
+          </Text>
+        </View>
+
+        <View style={styles.extraInfo}>
+          <View style={styles.info}>
+            <Text style={{ fontSize: 22, color: "pink" }}>Humidity</Text>
+            <Text style={{ fontSize: 22, color: "blue" }}>{humidity}%</Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={{ fontSize: 22, color: "pink" }}>Wind Speed</Text>
+            <Text style={{ fontSize: 22, color: "black" }}>{speed} m/s</Text>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -58,8 +93,21 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get("screen").width,
   },
-  headerText:{
-    fontSize:36,
-    marginTop:10
-  }
+  headerText: {
+    fontSize: 36,
+    marginTop: 10,
+  },
+  extraInfo: {
+    flexDirection: "row",
+    marginTop: 20,
+    justifyContent: "space-between",
+    padding: 10,
+  },
+  info: {
+    width: Dimensions.get("screen").width / 2.5,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 10,
+    borderRadius: 15,
+    justifyContent: "center",
+  },
 });
