@@ -1,8 +1,99 @@
+import { Pressable, View, Text, StyleSheet, Platform } from "react-native";
+
+function CategoryGridTile({ title, color,onPress }) {
+  return (
+    <View style={styles.gridItem}>
+      <Pressable
+        android_ripple={{ color: "#ccc" }}
+        style={({ pressed }) => [
+          styles.button,
+          pressed ? styles.buttonPressed : null,
+        ]}
+        onPress={onPress}
+      >
+        <View style={[styles.innerContainer, { backgroundColor: color }]}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+      </Pressable>
+    </View>
+  );
+}
+
+export default CategoryGridTile;
+
+const styles = StyleSheet.create({
+  gridItem: {
+    flex: 1,
+    margin: 16,
+    height: 150,
+    borderRadius: 8,
+    elevation: 4,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOpacity: 0.25,
+
+    shadowRadius: 8,
+  },
+  button: {
+    flex: 1,
+  },
+  buttonPressed: {
+    opacity: 0.5,
+  },
+  innerContainer: {
+    flex: 1,
+    borderRadius: 8,
+    padding: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+});
+-----------
+
+
+import { FlatList } from "react-native";
+import CategoryGridTile from "../components/CategoryGridTile";
+
+import { CATEGORIES } from "../data/dummy-data";
+
+function CategoriesScreen({ navigation }) {
+  function renderCategoryItem(itemData) {
+    function pressHandler() {
+      navigation.navigate("MealsOverview");
+    }
+    return (
+      <CategoryGridTile
+        title={itemData.item.title}
+        color={itemData.item.color}
+        onPress={pressHandler}
+      />
+    );
+  }
+  return (
+    <FlatList
+      data={CATEGORIES}
+      keyExtractor={(item) => item.id}
+      renderItem={renderCategoryItem}
+      numColumns={2}
+    />
+  );
+}
+
+export default CategoriesScreen;
+
+
+------------
+
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import CategoriesScreen from "./screens/CategoriesScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import MealsOverviewScreen from "./screens/MealsOverviewScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -12,6 +103,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="MealsCategories" component={CategoriesScreen} />
+          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
