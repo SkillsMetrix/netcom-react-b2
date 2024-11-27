@@ -1,19 +1,30 @@
+import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout } from "../redux/actions/authAction";
+export default function AuthApp() {
+  const isAuth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  return (
+    <View>
+      <Text>Access to Authorized Personals</Text>
+      <Button title="LogIn" onPress={() => dispatch(login())}></Button>
+      <Button title="LogOut" onPress={() => dispatch(logout())}></Button>
 
-1) component level (useState)
-2) contextAPI (app level)  component level
+      <View>
+        {isAuth ? (
+          <View>
+            <Text>
+              Congratulations...! You recieved 50% discount... use coupon code
+              YTUO&9POI to apply
+            </Text>
+          </View>
+        ) : (
+          <Text>Please Login to check the offer...!</Text>
+        )}
+      </View>
+    </View>
+  );
+}
 
-
-state management using REDUX
-working with routing.....
-
-
-3rd party 
-------
-
-state ---> app state
-
-store -----> it contains state in global level
-
-reducer -----> func (its take the action from the user and update the state in the store)
-
-action > func which client invoke
+const styles = StyleSheet.create({});
