@@ -1,96 +1,55 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import CategoriesScreen from "./screens/CategoriesScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import MealsOverviewScreen from "./screens/MealsOverviewScreen";
+import MealDetailScreen from "./screens/MealDetailScreen";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import FavoriteScreen from "./screens/FavoriteScreen";
 
-export default function IconButton({ icon, color, onPress }) {
+const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+function DrawerNavigator() {
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => pressed && styles.pressed}
+    <Drawer.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: "#351401" },
+      headerTintColor: "white",
+      contentStyle: { backgroundColor: "#3f2f25" },
+    }}
     >
-      <Ionicons name={icon} size={24} color={color} />
-    </Pressable>
+      <Drawer.Screen name="categories" component={CategoriesScreen} />
+      <Drawer.Screen name="Favorites" component={FavoriteScreen} />
+    </Drawer.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  pressed: {
-    opacity: 0.7,
-  },
-});
----------
-
-import { Button, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect } from "react";
-import { MEALS } from "../data/dummy-data";
-import MealDetails from "../components/MealDetails";
-import SubTitle from "../components/SubTitle";
-import List from "../components/List";
-import {Ionicons} from '@expo/vector-icons'
-import IconButton from "../components/IconButton";
-export default function MealDetailScreen({ route,navigation }) {
-  const mealId = route.params.mealId;
-  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
-
-  function headerButtonPressed(){
-    console.log('button pressed');
-    
-  }
-  useLayoutEffect(()=>{
-    navigation.setOptions({
-      headerRight:() =>{
-        return <IconButton onPress={headerButtonPressed} icon="star" color="pink"/>
-      }
-    })
-  })
+export default function App() {
   return (
-    <ScrollView style={styles.rootContainer}>
-      <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
-      <Text style={styles.title}>{selectedMeal.title}</Text>
-      <View>
-        <MealDetails
-          duration={selectedMeal.duration}
-          complexity={selectedMeal.complexity}
-          affordability={selectedMeal.affordability}
-          textStyle={styles.detailText}
-        />
+    <>
+      <StatusBar style="light" />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "#351401" },
+            headerTintColor: "white",
+            contentStyle: { backgroundColor: "#3f2f25" },
+          }}
+        >
+          <Stack.Screen
+            name="Drawer"
+            component={DrawerNavigator}
+            options={{ headerShown:false }}
 
-        <View style={styles.listOuterContainer}>
-          <View style={styles.listContainer}>
-            <SubTitle>Ingredients</SubTitle>
-            <List data={selectedMeal.ingredients} />
-
-            <SubTitle>Steps</SubTitle>
-            <List data={selectedMeal.steps} />
-          </View>
-        </View>
-      </View>
-    </ScrollView>
+          />
+          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
+          <Stack.Screen name="MealDetail" component={MealDetailScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: 350,
-  },
-  rootContainer:{
-    marginBottom:32
-  },
-  title:{
-    fontWeight:'bold',
-    fontSize:24,
-    margin:8,
-    textAlign:'center',
-    color:'pink'
-  },
-  detailText:{
-    color:'pink'
-  },
-  listOuterContainer:{
-    alignItems:'center'
-  },
-  listContainer:{
-    width:'85%'
-  }
+  container: {},
 });
