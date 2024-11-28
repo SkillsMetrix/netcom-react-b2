@@ -1,69 +1,48 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function List({ data }) {
-  return data.map((dataPoint) => (
-    <View key={dataPoint} style={styles.listItem}>
-      <Text style={styles.itemText} key={dataPoint}>{dataPoint}</Text>
-    </View>
-  ));
-}
-
-const styles = StyleSheet.create({
-  listItem:{
-    borderRadius:6,
-    paddingHorizontal:8,
-    paddingVertical:4,
-    marginVertical:4,
-    marginHorizontal:12,
-    backgroundColor:'#e2b497'
-  },
-  itemText:{
-    color:'#351401',
-    textAlign:'center'
-  }
-});
-----
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-
-export default function SubTitle({ children }) {
+export default function IconButton({ icon, color, onPress }) {
   return (
-    <View style={styles.subTitleContainer}>
-      <Text style={styles.subTitle}>{children}</Text>
-    </View>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
+      <Ionicons name={icon} size={24} color={color} />
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-subTitle:{
-  color:'#e2b497',
-  fontSize:18,
-  fontWeight:'bold',
-  textAlign:'center'
-},
-subTitleContainer:{
-  padding:6,
-  marginHorizontal:12,
-  marginVertical:4,
-  borderBottomColor:'#e2b497',
-  borderBottomWidth:2
-}
+  pressed: {
+    opacity: 0.7,
+  },
 });
+---------
 
-
-----------
-
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Button, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useLayoutEffect } from "react";
 import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import SubTitle from "../components/SubTitle";
 import List from "../components/List";
-
-export default function MealDetailScreen({ route }) {
+import {Ionicons} from '@expo/vector-icons'
+import IconButton from "../components/IconButton";
+export default function MealDetailScreen({ route,navigation }) {
   const mealId = route.params.mealId;
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  function headerButtonPressed(){
+    console.log('button pressed');
+    
+  }
+  useLayoutEffect(()=>{
+    navigation.setOptions({
+      headerRight:() =>{
+        return <IconButton onPress={headerButtonPressed} icon="star" color="pink"/>
+      }
+    })
+  })
   return (
     <ScrollView style={styles.rootContainer}>
       <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
@@ -114,42 +93,4 @@ const styles = StyleSheet.create({
   listContainer:{
     width:'85%'
   }
-});
-
-
------------
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-
-export default function MealDetails({
-  duration,
-  complexity,
-  affordability,
-  style,
-  textStyle,
-}) {
-  return (
-    <View style={styles.details}>
-      <Text style={[styles.detailItem, textStyle]}>{duration}m</Text>
-      <Text style={[styles.detailItem, textStyle]}>
-        {complexity.toUpperCase()}
-      </Text>
-      <Text style={[styles.detailItem, textStyle]}>
-        {affordability.toUpperCase()}
-      </Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  details: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 8,
-  },
-  detailItem: {
-    marginHorizontal: 4,
-    fontSize: 12,
-  },
 });
