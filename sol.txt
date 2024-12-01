@@ -1,45 +1,79 @@
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import React, { isValidElement, useState } from "react";
-import * as SMS from "expo-sms";
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import * as Contacts from 'expo-contacts';
+import { useEffect, useState } from 'react';
 
-export default function SmsApp() {
-  const [number, setNumber] = useState("");
-  const [message, setMessage] = useState("");
+export default function ContactsApp() {
+  let [error, setError] = useState(undefined);
+  let [contacts, setContacts] = useState(undefined);
 
-  const checkSMS = async () => {
-    const isAvailable = await SMS.isAvailableAsync();
-    if (isAvailable) {
-      alert("SMS service is active");
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === "granted") {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [ Contacts.Fields.Birthday, Contacts.Fields.Emails, Contacts.Fields.FirstName, Contacts.Fields.LastName, Contacts.Fields.PhoneNumbers]
+        });
+
+        if (data.length > 0) {
+          setContacts(data);
+        } else {
+          setError("No contacts found");
+        }
+      } else {
+        setError("Permission to access contacts denied.");
+      }
+    })();
+  }, []);
+
+  let getContactData = (data, property) => {
+    if (data) {
+      return data.map((data, index) => {
+        return (
+          <View key={index}>
+            <Text>{data.label}: {data[property]}</Text>
+          </View>
+        )
+      });
+    }
+  }
+
+  let getContactRows = () => {
+    if (contacts !== undefined) {
+      return contacts.map((contact, index) => {
+        return (
+          <View key={index} style={styles.contact}>
+            <Text>Name: {contact.firstName} {contact.lastName}</Text>
+            {contact.birthday ? <Text>Birthday: {contact.birthday.month}/{contact.birthday.day}/{contact.birthday.year}</Text> : undefined}
+            {getContactData(contact.phoneNumbers, "number")}
+            {getContactData(contact.emails, "email")}
+          </View>
+        );
+      });
     } else {
-      alert("service not active");
+      return <Text>Awaiting contacts...</Text>
     }
-  };
-  const sendSMS = async () => {
-    const { result } = await SMS.sendSMSAsync(number, message);
-    if (result === "sent") {
-      console.log(result);
-      alert("message sent");
-    }
-  };
-  return (
-    <View>
-      <Text>SmsApp</Text>
-      <TextInput
-        value={message}
-        placeholder="Enter Message"
-        onChangeText={setMessage}
-      />
-      <TextInput
-        value={number}
-        placeholder="Enter Number"
-        onChangeText={setNumber}
-        keyboardType="phone-pad"
-      />
-      <Button title="Send SMS" onPress={sendSMS}></Button>
+  }
 
-      <Button title="check Service" onPress={checkSMS}></Button>
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        {getContactRows()}
+      </ScrollView>
+      <Text>{error}</Text>
+      <StatusBar style="auto" />
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contact: {
+    marginVertical: 8
+  }
+});
