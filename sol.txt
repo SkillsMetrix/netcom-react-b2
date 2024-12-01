@@ -1,72 +1,45 @@
-import { StyleSheet, Text, View, Alert } from "react-native";
-import React, { useEffect, useState } from "react";
-import * as Location from "expo-location";
+import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import React, { isValidElement, useState } from "react";
+import * as SMS from "expo-sms";
 
-export default function GeoApp() {
-  const [displayAddress, setDisplayAddress] = useState("Loading.....");
-  const [locationServicesEnabled, setLocationServicesEnabled] = useState(false);
+export default function SmsApp() {
+  const [number, setNumber] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    checkLocationEnabled()
-    getCurrentLocation()
-  }, []);
-  //check if loaction is enabled
-  const checkLocationEnabled = async () => {
-    let enabled = await Location.hasServicesEnabledAsync();
-    if (!enabled) {
-      Alert.alert("Location is not enabled...!", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("cancel pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+  const checkSMS = async () => {
+    const isAvailable = await SMS.isAvailableAsync();
+    if (isAvailable) {
+      alert("SMS service is active");
     } else {
-      setLocationServicesEnabled(enabled);
+      alert("service not active");
     }
   };
-  //get current location
-  const getCurrentLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    console.log(status);
-    if (status !== "granted") {
-      Alert.alert("Permission Denied...!", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("cancel pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-    }
-    //get current position let and log
-    const { coords } = await Location.getCurrentPositionAsync();
-    console.log(coords);
-    if (coords) {
-      const { latitude, longitude } = coords;
-      console.log(latitude, longitude);
-
-      //provide lat and log to get the actual address
-      let response = await Location.reverseGeocodeAsync({
-        latitude,
-        longitude,
-      });
-      console.log(response);
-      // loop on the response
-      for (let item of response) {
-        let address = ` ${item.name} ${item.city} ${item.postalCode}`;
-
-        setDisplayAddress(address);
-      }
+  const sendSMS = async () => {
+    const { result } = await SMS.sendSMSAsync(number, message);
+    if (result === "sent") {
+      console.log(result);
+      alert("message sent");
     }
   };
+  return (
+    <View>
+      <Text>SmsApp</Text>
+      <TextInput
+        value={message}
+        placeholder="Enter Message"
+        onChangeText={setMessage}
+      />
+      <TextInput
+        value={number}
+        placeholder="Enter Number"
+        onChangeText={setNumber}
+        keyboardType="phone-pad"
+      />
+      <Button title="Send SMS" onPress={sendSMS}></Button>
 
-
-return (
-  <View>
-    <Text>{displayAddress}</Text>
-  </View>
-);
+      <Button title="check Service" onPress={checkSMS}></Button>
+    </View>
+  );
 }
+
 const styles = StyleSheet.create({});
