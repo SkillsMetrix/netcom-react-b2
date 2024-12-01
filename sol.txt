@@ -1,30 +1,59 @@
-import { createContext, useState } from "react";
+import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { CameraView, useCameraPermissions } from "expo-camera";
 
-export const FavContext = createContext({
-  ids: [],
-  addFavorite: (id) => {},
-  removeFavorite: (id) => {},
-});
-
-function FavoriteContextProvider({ children }) {
-  const [favMealsId, setFavMealsId] = useState([]);
-
-  function addFavorite(id) {
-    setFavMealsId((curentFavIds) => [...curentFavIds, id]);
+export default function CameraApp() {
+  const [facing, setFacing] = useState("back");
+  const [permission, requestPermission] = useCameraPermissions();
+  if (permission) {
+    return <View />;
   }
-
-  function removeFavorite(id) {
-    setFavMealsId((curentFavIds) =>
-      setFavMealsId.filter((mealId) => mealId !== id)
+  if (!permission.granted) {
+    return (
+      <View>
+        <Text>Permission Denied...!</Text>
+        <Button title="Grant Permission" onPress={requestPermission}></Button>
+      </View>
     );
   }
-  const value={
-    ids:favMealsId,
-    addFavorite:addFavorite,
-    removeFavorite:removeFavorite
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
   }
-
-  return <FavContext.Provider value={value}>{children}</FavContext.Provider>;
+  return (
+    <View style={styles.container}>
+      <CameraView style={styles.camera} facing={facing}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+            <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </CameraView>
+    </View>
+  );
 }
 
-export default FavoriteContextProvider;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: "center",
+  },
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+});
