@@ -1,28 +1,29 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
 
-export default function CameraApp() {
+export default function App() {
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
-  if (permission) {
+
+  if (!permission) {
     return <View />;
   }
   if (!permission.granted) {
     return (
       <View>
-        <Text>Permission Denied...!</Text>
-        <Button title="Grant Permission" onPress={requestPermission}></Button>
+        <Text style={{ textAlign: "center" }}>Permission denied</Text>
+        <Button onPress={requestPermission} title="grant permission"></Button>
       </View>
     );
   }
   function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
+    setFacing((curent) => (curent === "back" ? "front" : "back"));
   }
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} facing={facing}>
-        <View style={styles.buttonContainer}>
+        <View style={styles.buttonConatiner}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <Text style={styles.text}>Flip Camera</Text>
           </TouchableOpacity>
@@ -40,11 +41,11 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
+  buttonConatiner: {
     flex: 1,
     flexDirection: "row",
     backgroundColor: "transparent",
-    margin: "center",
+    margin: 64,
   },
   button: {
     flex: 1,
